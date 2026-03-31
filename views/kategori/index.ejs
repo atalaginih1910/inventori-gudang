@@ -1,0 +1,132 @@
+<%- include('../partials/header') %>
+
+<div class="row g-4">
+  <!-- Add Category Form -->
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white border-bottom pt-3">
+        <h6 class="mb-0 fw-semibold">
+          <i class="bi bi-plus-circle me-2 text-primary"></i>Tambah Kategori
+        </h6>
+      </div>
+      <div class="card-body">
+        <form action="/kategori" method="POST">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nama Kategori <span class="text-danger">*</span></label>
+            <input type="text" name="nama" class="form-control" required placeholder="Nama kategori" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Deskripsi</label>
+            <textarea name="deskripsi" class="form-control" rows="2" placeholder="Deskripsi (opsional)"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-plus-lg me-1"></i>Tambah
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category List -->
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white border-bottom pt-3">
+        <h6 class="mb-0 fw-semibold">
+          <i class="bi bi-tags me-2 text-primary"></i>Daftar Kategori
+        </h6>
+      </div>
+      <div class="card-body p-0">
+        <% if (kategori.length === 0) { %>
+          <div class="text-center py-5 text-secondary">
+            <i class="bi bi-tags fs-1 d-block mb-2 text-muted"></i>
+            <p class="mb-0">Belum ada kategori</p>
+          </div>
+        <% } else { %>
+          <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>Nama</th>
+                  <th>Deskripsi</th>
+                  <th>Jml Produk</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% kategori.forEach((k, idx) => { %>
+                  <tr>
+                    <td class="text-secondary small"><%= idx + 1 %></td>
+                    <td><strong><%= k.nama %></strong></td>
+                    <td class="text-secondary small"><%= k.deskripsi || '-' %></td>
+                    <td>
+                      <span class="badge bg-primary bg-opacity-75"><%= k.jumlah_produk %></span>
+                    </td>
+                    <td>
+                      <div class="d-flex gap-1">
+                        <button type="button" class="btn btn-sm btn-outline-primary"
+                          data-bs-toggle="modal" data-bs-target="#editModal"
+                          data-id="<%= k.id %>" data-nama="<%= k.nama %>" data-deskripsi="<%= k.deskripsi || '' %>">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <form action="/kategori/<%= k.id %>?_method=DELETE" method="POST"
+                          onsubmit="return confirm('Hapus kategori ini? Produk yang terkait tidak akan dihapus.')">
+                          <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Kategori</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="editForm" method="POST">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nama Kategori <span class="text-danger">*</span></label>
+            <input type="text" name="nama" id="editNama" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Deskripsi</label>
+            <textarea name="deskripsi" id="editDeskripsi" class="form-control" rows="2"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const editModal = document.getElementById('editModal');
+  editModal.addEventListener('show.bs.modal', function (e) {
+    const btn = e.relatedTarget;
+    const id = btn.getAttribute('data-id');
+    const nama = btn.getAttribute('data-nama');
+    const deskripsi = btn.getAttribute('data-deskripsi');
+    document.getElementById('editNama').value = nama;
+    document.getElementById('editDeskripsi').value = deskripsi;
+    document.getElementById('editForm').action = '/kategori/' + id + '?_method=PUT';
+  });
+</script>
+
+<%- include('../partials/footer') %>

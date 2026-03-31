@@ -1,0 +1,142 @@
+<%- include('./partials/header') %>
+
+<!-- Stats Cards -->
+<div class="row g-4 mb-4">
+  <div class="col-sm-6 col-xl-3">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body d-flex align-items-center gap-3">
+        <div class="rounded-3 p-3 bg-primary bg-opacity-10">
+          <i class="bi bi-box-seam fs-3 text-primary"></i>
+        </div>
+        <div>
+          <div class="text-secondary small">Total Produk</div>
+          <div class="fs-3 fw-bold"><%= totalProduk %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body d-flex align-items-center gap-3">
+        <div class="rounded-3 p-3 bg-success bg-opacity-10">
+          <i class="bi bi-tags fs-3 text-success"></i>
+        </div>
+        <div>
+          <div class="text-secondary small">Total Kategori</div>
+          <div class="fs-3 fw-bold"><%= totalKategori %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body d-flex align-items-center gap-3">
+        <div class="rounded-3 p-3 bg-warning bg-opacity-10">
+          <i class="bi bi-exclamation-triangle fs-3 text-warning"></i>
+        </div>
+        <div>
+          <div class="text-secondary small">Stok Rendah</div>
+          <div class="fs-3 fw-bold"><%= stokRendah %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body d-flex align-items-center gap-3">
+        <div class="rounded-3 p-3 bg-info bg-opacity-10">
+          <i class="bi bi-wallet2 fs-3 text-info"></i>
+        </div>
+        <div>
+          <div class="text-secondary small">Nilai Stok</div>
+          <div class="fs-5 fw-bold">Rp <%= totalNilaiStok.toLocaleString('id-ID') %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Monthly summary -->
+  <div class="col-md-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-header bg-white fw-semibold border-bottom pt-3">
+        <i class="bi bi-calendar-month me-2 text-primary"></i>Ringkasan Bulan Ini
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-success bg-opacity-10 rounded-3">
+          <div>
+            <div class="small text-secondary mb-1">Barang Masuk</div>
+            <div class="fs-4 fw-bold text-success"><%= totalMasuk %> unit</div>
+          </div>
+          <i class="bi bi-arrow-down-circle-fill fs-2 text-success"></i>
+        </div>
+        <div class="d-flex justify-content-between align-items-center p-3 bg-danger bg-opacity-10 rounded-3">
+          <div>
+            <div class="small text-secondary mb-1">Barang Keluar</div>
+            <div class="fs-4 fw-bold text-danger"><%= totalKeluar %> unit</div>
+          </div>
+          <i class="bi bi-arrow-up-circle-fill fs-2 text-danger"></i>
+        </div>
+        <div class="mt-3">
+          <a href="/transaksi/tambah" class="btn btn-primary w-100">
+            <i class="bi bi-plus-circle me-2"></i>Catat Transaksi Baru
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent transactions -->
+  <div class="col-md-8">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-header bg-white fw-semibold border-bottom pt-3 d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-clock-history me-2 text-primary"></i>Transaksi Terbaru</span>
+        <a href="/transaksi" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
+      </div>
+      <div class="card-body p-0">
+        <% if (transaksiTerbaru.length === 0) { %>
+          <div class="text-center text-secondary py-5">
+            <i class="bi bi-inbox fs-1 d-block mb-2 text-muted"></i>
+            <p class="mb-0">Belum ada transaksi</p>
+            <a href="/transaksi/tambah" class="btn btn-sm btn-primary mt-2">Catat Sekarang</a>
+          </div>
+        <% } else { %>
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Produk</th>
+                  <th>Jenis</th>
+                  <th>Jumlah</th>
+                  <th>Keterangan</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% transaksiTerbaru.forEach(t => { %>
+                  <tr>
+                    <td class="small text-nowrap">
+                      <%= new Date(t.tanggal).toLocaleDateString('id-ID', {day:'2-digit',month:'short',year:'numeric'}) %>
+                    </td>
+                    <td><%= t.nama_produk %></td>
+                    <td>
+                      <span class="badge <%= t.jenis === 'masuk' ? 'bg-success' : 'bg-danger' %>">
+                        <i class="bi <%= t.jenis === 'masuk' ? 'bi-arrow-down' : 'bi-arrow-up' %> me-1"></i>
+                        <%= t.jenis === 'masuk' ? 'Masuk' : 'Keluar' %>
+                      </span>
+                    </td>
+                    <td><strong><%= t.jumlah %></strong></td>
+                    <td class="text-secondary small"><%= t.keterangan || '-' %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('./partials/footer') %>

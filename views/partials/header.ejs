@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> - Inventori Gudang</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<div class="d-flex">
+  <!-- Sidebar -->
+  <nav id="sidebar" class="bg-dark text-white d-flex flex-column p-0" style="min-width:240px;min-height:100vh;position:sticky;top:0;">
+    <div class="sidebar-brand p-3 border-bottom border-secondary">
+      <i class="bi bi-boxes me-2 text-warning fs-5"></i>
+      <span class="fw-bold fs-5">Inventori Gudang</span>
+    </div>
+    <ul class="nav flex-column py-2 flex-grow-1">
+      <li class="nav-item">
+        <a href="/" class="nav-link px-3 py-2 <%= currentPath === '/' ? 'active text-white bg-primary' : 'text-white-50' %>">
+          <i class="bi bi-speedometer2 me-2"></i>Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/produk" class="nav-link px-3 py-2 <%= currentPath.startsWith('/produk') ? 'active text-white bg-primary' : 'text-white-50' %>">
+          <i class="bi bi-box-seam me-2"></i>Produk
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/kategori" class="nav-link px-3 py-2 <%= currentPath.startsWith('/kategori') ? 'active text-white bg-primary' : 'text-white-50' %>">
+          <i class="bi bi-tags me-2"></i>Kategori
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/transaksi" class="nav-link px-3 py-2 <%= currentPath === '/transaksi' ? 'active text-white bg-primary' : 'text-white-50' %>">
+          <i class="bi bi-arrow-left-right me-2"></i>Transaksi
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/transaksi/tambah" class="nav-link px-3 py-2 <%= currentPath === '/transaksi/tambah' ? 'active text-white bg-primary' : 'text-white-50' %>">
+          <i class="bi bi-plus-circle me-2"></i>Catat Transaksi
+        </a>
+      </li>
+    </ul>
+    <div class="p-3 border-top border-secondary small text-secondary">
+      &copy; 2024 Inventori Gudang
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <div class="flex-grow-1 d-flex flex-column" style="min-height:100vh;background:#f4f6fb;">
+    <header class="bg-white border-bottom px-4 py-3 d-flex align-items-center justify-content-between shadow-sm">
+      <h5 class="mb-0 fw-semibold text-dark"><%= title %></h5>
+      <span class="text-secondary small">
+        <i class="bi bi-calendar3 me-1"></i>
+        <span id="tanggalSekarang"></span>
+      </span>
+    </header>
+    <main class="p-4 flex-grow-1">
