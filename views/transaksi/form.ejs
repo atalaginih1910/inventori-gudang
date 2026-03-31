@@ -1,0 +1,109 @@
+<%- include('../partials/header') %>
+
+<% if (typeof errorMsg !== 'undefined' && errorMsg) { %>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="bi bi-exclamation-triangle me-2"></i><%= errorMsg %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+<% } %>
+
+<div class="row justify-content-center">
+  <div class="col-lg-6">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white border-bottom pt-3">
+        <h6 class="mb-0 fw-semibold">
+          <i class="bi bi-arrow-left-right me-2 text-primary"></i>Catat Transaksi Stok
+        </h6>
+      </div>
+      <div class="card-body">
+        <form action="/transaksi" method="POST">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Produk <span class="text-danger">*</span></label>
+            <select name="produk_id" class="form-select" required id="produkSelect">
+              <option value="">-- Pilih Produk --</option>
+              <% produk.forEach(p => { %>
+                <option value="<%= p.id %>"
+                  data-stok="<%= p.stok %>"
+                  data-satuan="<%= p.satuan %>"
+                  <%= selectedProduk == p.id ? 'selected' : '' %>>
+                  <%= p.nama %> <%= p.kode ? '(' + p.kode + ')' : '' %> — Stok: <%= p.stok %> <%= p.satuan %>
+                </option>
+              <% }) %>
+            </select>
+            <div id="stokInfo" class="form-text mt-1"></div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Jenis Transaksi <span class="text-danger">*</span></label>
+            <div class="d-flex gap-3">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="jenis" id="jenisMasuk" value="masuk" checked />
+                <label class="form-check-label text-success fw-semibold" for="jenisMasuk">
+                  <i class="bi bi-arrow-down-circle me-1"></i>Masuk
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="jenis" id="jenisKeluar" value="keluar" />
+                <label class="form-check-label text-danger fw-semibold" for="jenisKeluar">
+                  <i class="bi bi-arrow-up-circle me-1"></i>Keluar
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Jumlah <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <input type="number" name="jumlah" class="form-control" min="1" required
+                placeholder="Jumlah" id="jumlahInput" />
+              <span class="input-group-text" id="satuanLabel">unit</span>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Tanggal</label>
+            <input type="date" name="tanggal" class="form-control"
+              value="<%= new Date().toISOString().split('T')[0] %>" />
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Keterangan</label>
+            <textarea name="keterangan" class="form-control" rows="2"
+              placeholder="Catatan tambahan (opsional)"></textarea>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-check-lg me-1"></i>Simpan Transaksi
+            </button>
+            <a href="/transaksi" class="btn btn-outline-secondary">Batal</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const produkSelect = document.getElementById('produkSelect');
+  const stokInfo = document.getElementById('stokInfo');
+  const satuanLabel = document.getElementById('satuanLabel');
+
+  function updateStokInfo() {
+    const selected = produkSelect.options[produkSelect.selectedIndex];
+    if (selected.value) {
+      const stok = selected.getAttribute('data-stok');
+      const satuan = selected.getAttribute('data-satuan');
+      stokInfo.innerHTML = '<span class="text-info"><i class="bi bi-info-circle me-1"></i>Stok saat ini: <strong>' + stok + ' ' + satuan + '</strong></span>';
+      satuanLabel.textContent = satuan;
+    } else {
+      stokInfo.textContent = '';
+      satuanLabel.textContent = 'unit';
+    }
+  }
+
+  produkSelect.addEventListener('change', updateStokInfo);
+  updateStokInfo();
+</script>
+
+<%- include('../partials/footer') %>

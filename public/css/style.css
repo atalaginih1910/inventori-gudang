@@ -1,0 +1,56 @@
+/* Inventori Gudang - Custom Styles */
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+}
+
+#sidebar {
+  min-height: 100vh;
+  height: 100vh;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+}
+
+#sidebar .nav-link {
+  border-radius: 6px;
+  margin: 2px 8px;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+#sidebar .nav-link:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff !important;
+}
+
+.sidebar-brand {
+  letter-spacing: 0.01em;
+}
+
+.card {
+  border-radius: 12px;
+}
+
+.table th {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6c757d;
+}
+
+.badge {
+  font-weight: 500;
+  font-size: 11px;
+}
+
+.btn-sm {
+  font-size: 12px;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
